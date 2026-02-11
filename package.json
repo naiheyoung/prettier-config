@@ -1,6 +1,6 @@
 {
   "name": "@naiheyoung/prettier",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "packageManager": "pnpm@10.28.0",
   "description": "personal prettier configuration.",
   "homepage": "https://github.com/naiheyoung/prettier-config#readme",
