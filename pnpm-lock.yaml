@@ -34,8 +34,8 @@ importers:
   playground:
     devDependencies:
       '@naiheyoung/prettier':
-        specifier: workspace:*
-        version: link:..
+        specifier: ^0.0.1
+        version: 0.0.1(prettier@3.8.1)
 
 packages:
 
@@ -237,6 +237,11 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@naiheyoung/prettier@0.0.1':
+    resolution: {integrity: sha512-t8Pz3SHVgR9hSVed5hc2SV3uRShfy9osblqJup2XkdP2KPsE1hACTPXDVOY0akPbAq7vAUzVJRHdyuqus9aLlA==, tarball: https://registry.npmjs.org/@naiheyoung/prettier/-/prettier-0.0.1.tgz}
+    peerDependencies:
+      prettier: ^3.0.0
 
   '@napi-rs/wasm-runtime@1.1.1':
     resolution: {integrity: sha512-p64ah1M1ld8xjWv3qbvFwHiFVWrq1yFvV4f7w+mzaqiR4IlSgkqhcRdHwsGgomwzBH51sRY4NEowLxnaBjcW/A==}
@@ -989,6 +994,11 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@naiheyoung/prettier@0.0.1(prettier@3.8.1)':
+    dependencies:
+      prettier: 3.8.1
+      prettier-plugin-organize-attributes: 1.0.0(prettier@3.8.1)
 
   '@napi-rs/wasm-runtime@1.1.1':
     dependencies:
