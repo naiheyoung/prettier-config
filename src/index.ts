@@ -1,5 +1,6 @@
 import type { Config } from 'prettier'
 import type { PrettierPluginOrganizeAttributesParserOptions as OrganizeAttributesConfig } from 'prettier-plugin-organize-attributes'
+import * as organizeAttributes from 'prettier-plugin-organize-attributes'
 
 const config: Config & OrganizeAttributesConfig = {
   arrowParens: 'avoid',
@@ -10,7 +11,7 @@ const config: Config & OrganizeAttributesConfig = {
   htmlWhitespaceSensitivity: 'css',
   jsxSingleQuote: true,
   objectWrap: 'collapse',
-  plugins: ['prettier-plugin-organize-attributes'],
+  plugins: [organizeAttributes],
   printWidth: 95,
   proseWrap: 'preserve',
   quoteProps: 'as-needed',
