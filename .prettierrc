@@ -1,0 +1,9 @@
+{
+  "arrowParens": "avoid",
+  "bracketSameLine": true,
+  "htmlWhitespaceSensitivity": "ignore",
+  "printWidth": 95,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "none"
+}
