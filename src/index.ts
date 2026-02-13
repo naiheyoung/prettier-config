@@ -1,8 +1,7 @@
 import type { Config } from 'prettier'
-import type { PrettierPluginOrganizeAttributesParserOptions as OrganizeAttributesConfig } from 'prettier-plugin-organize-attributes'
-import * as organizeAttributes from 'prettier-plugin-organize-attributes'
+import { AttributeSortConfig } from './types'
 
-const config: Config & OrganizeAttributesConfig = {
+const config: Config & AttributeSortConfig = {
   arrowParens: 'avoid',
   bracketSameLine: true,
   bracketSpacing: true,
@@ -11,7 +10,6 @@ const config: Config & OrganizeAttributesConfig = {
   htmlWhitespaceSensitivity: 'css',
   jsxSingleQuote: true,
   objectWrap: 'preserve',
-  plugins: [organizeAttributes],
   printWidth: 95,
   proseWrap: 'preserve',
   quoteProps: 'as-needed',
@@ -20,25 +18,7 @@ const config: Config & OrganizeAttributesConfig = {
   singleQuote: true,
   tabWidth: 2,
   trailingComma: 'none',
-  vueIndentScriptAndStyle: false,
-  attributeGroups: [
-    '^(lang|xmlns|charset|rel)$',
-    '^tabindex$',
-    '^(id|name|content)$',
-    '^ref$',
-    '^:style$',
-    '$CLASS',
-    '^:class$',
-    '^\[\]$',
-    '$DEFAULT',
-    '$VUE_ATTRIBUTE',
-    '^(:|@)',
-    '$DATA',
-    '$ARIA',
-    '$ROLE'
-  ],
-  attributeIgnoreCase: false,
-  attributeSort: 'ASC'
+  vueIndentScriptAndStyle: false
 }
 
 export default config

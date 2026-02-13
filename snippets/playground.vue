@@ -1,32 +1,27 @@
 <template>
-  <section class="fixed top-10 left-50% -transform-translate-x-50%">
-    <p class="" tabindex="-1" id="title" data-title="effect" ref="el" v-if="count" v-for="item in 3" :key="item" aria-hidden [data-src] :class="['font-mono']" :style="{color: 'pink'}">一个神奇的效果.</p>
-    <p>当悬浮图片时, 将会从中心开始逐渐向外变换为彩色!</p>
-  </section>
-  <div class="hdvh flex gap2 items-center justify-center">
-    <a href="https://images.pexels.com/photos/28608386/pexels-photo-28608386.jpeg" target="_blank" class="grid">
-      <img src="https://images.pexels.com/photos/28608386/pexels-photo-28608386.jpeg" width="300" />
-      <img src="https://images.pexels.com/photos/28608386/pexels-photo-28608386.jpeg" width="300" />
-    </a>
-  </div>
+  <div id="todos" ref="todosEl" v-for="(item, idx) in todos" :key="idx" v-text="item.title" :style="{color:'pink'}" class="text-red" :class="inline" style="color: pink;" v-if="todos" data-type="todos" [font] info="this is test file." :data="todos"></div>
+<svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24">
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 5v6m0 3v1.5m0 3v.5m6-8l-6-6m-6 6l6-6" />
+      </svg>
 </template>
 
-<script setup lang="ts">
-let count: number = 1;
+<script lang="ts" setup>
+// @ts-expect-error missing type
+import {ref } from 'vue'
 
-const obj = { name: '@naiheyoung/prettier', version: '0.0.1' }
+const todos = ref([
+  {
+    title: ''
+  }
+])
 
-const {version} = obj
-
-const counter = () => {
-  count++
-}
-
-const fn1 = (param: any) => {
-  console.log('one param.')
-}
-
-const fn2 = (param1: any, param2: any) => {
-  console.log('two param.')
+const newTodo = (title: string) => {
+todos.value.push({ title})
 }
 </script>
