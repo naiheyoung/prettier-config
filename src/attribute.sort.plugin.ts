@@ -1,7 +1,7 @@
-import type { Plugin, ParserOptions, Options } from 'prettier'
+import type { Plugin } from 'prettier'
 import { AST, Rule } from './types'
-import { parsers as htmlParsers } from 'prettier/parser-html'
 import { generateRule, toSort, mergeObject } from './utils'
+import { parsers as htmlParsers } from 'prettier/parser-html'
 
 const defaultRule: Rule = {
   html: {
@@ -73,4 +73,4 @@ const attrsSort: Plugin = {
   }
 }
 
-export { attrsSort }
+export default attrsSort

@@ -1,7 +1,8 @@
 import type { Config } from 'prettier'
-import { AttributeSortConfig } from './types'
+import attrsSort from './attribute.sort.plugin'
+import specifiersSort from './specifier.sort.plugin'
 
-const config: Config & AttributeSortConfig = {
+const config: Config = {
   arrowParens: 'avoid',
   bracketSameLine: true,
   bracketSpacing: true,
@@ -10,6 +11,7 @@ const config: Config & AttributeSortConfig = {
   htmlWhitespaceSensitivity: 'css',
   jsxSingleQuote: true,
   objectWrap: 'preserve',
+  plugins: [attrsSort, specifiersSort],
   printWidth: 95,
   proseWrap: 'preserve',
   quoteProps: 'as-needed',

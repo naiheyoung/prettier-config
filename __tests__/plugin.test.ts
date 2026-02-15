@@ -2,16 +2,14 @@ import { describe, it, expect } from 'vitest'
 import * as prettier from 'prettier'
 import fs from 'fs-extra'
 import n from '../src/index'
-import { attrsSort } from '../src/plugin'
 
-describe('test plugin', () => {
+describe('sort attributes', () => {
   it('index.html', async () => {
     const source = await fs.readFile('snippets/index.html', 'utf-8')
     expect(
       await prettier.format(source, {
         ...n,
-        parser: 'html',
-        plugins: [attrsSort]
+        parser: 'html'
       })
     ).toMatchInlineSnapshot(
       `
@@ -50,27 +48,27 @@ describe('test plugin', () => {
     expect(
       await prettier.format(source, {
         ...n,
-        parser: 'vue',
-        plugins: [attrsSort]
+        parser: 'vue'
       })
     ).toMatchInlineSnapshot(`
       "<template>
         <div
           id="todos"
           ref="todosEl"
-          style="color: pink"
           :style="{ color: 'pink' }"
           class="text-red"
           :class="inline"
-          :data="todos"
-          info="this is test file."
-          v-for="(item, idx) in todos"
-          :key="idx"
           [font]
+          info="this is test file."
+          style="color: pink"
+          v-for="(item, idx) in todos"
           v-if="todos"
           v-text="item.title"
+          :data="todos"
+          :key="idx"
+          @click=""
           data-type="todos"></div>
-        <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24">
+        <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" viewBox="0 0 24 24" width="1.2em">
           <path
             d="M12 5v6m0 3v1.5m0 3v.5m6-8l-6-6m-6 6l6-6"
             fill="none"
@@ -81,20 +79,54 @@ describe('test plugin', () => {
         </svg>
       </template>
 
-      <script setup lang="ts">
+      <script lang="ts" setup>
       // @ts-expect-error missing type
-      import { ref } from 'vue'
+      import { a, b, h, ref, _ } from 'vue'
 
       const todos = ref([
         {
           title: ''
         }
       ])
+      // @ts-expect-error
+      import xxx from 'xxx'
 
       const newTodo = (title: string) => {
         todos.value.push({ title })
       }
       </script>
+
+      <script>
+      import * as prettier from 'prettier'
+      // @ts-expect-error
+      import {a,b} from x
+      </script>
+      "
+    `)
+  })
+})
+
+describe('sort specifiers', () => {
+  it('playground.ts', async () => {
+    const source = await fs.readFile('snippets/playground.ts', 'utf-8')
+    expect(
+      await prettier.format(source, {
+        ...n,
+        parser: 'typescript'
+      })
+    ).toMatchInlineSnapshot(`
+      "// @ts-nocheck i know
+      import type { a, b, c, _ } from 'xxx'
+      import type x from 'x'
+      import { a, b as a, c, _ } from 'xxx'
+      import XXX from 'xxx'
+      import xxx from 'xxx'
+      import A, { a, b, _a, _c } from 'xxx'
+
+      /// toarrow
+      const fn = (str: string) => {
+        console.log(str)
+      }
       "
     `)
   })

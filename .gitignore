@@ -132,4 +132,4 @@ dist
 
 /playground/
 
-__snapshot__.json
+__snapshot*__.json

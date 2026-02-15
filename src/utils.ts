@@ -23,9 +23,11 @@ const getPriorityByIndex = (s: string, rule: Rule[keyof Rule]): number => {
 /**
  * special character handling
  */
-const normalize = (s: string) => {
+export const normalize = (s: string) => {
   if (s.startsWith(':')) return s.slice(1)
   if (s.startsWith('[') && s.endsWith(']')) return s.slice(1, -1)
+  if (s.startsWith('_')) return s.slice(1)
+  if (s.startsWith('@')) return s.slice(1)
   return s
 }
 
@@ -36,7 +38,12 @@ export const toSort = (attrs: AST['attrs'] | any, rule: Rule[keyof Rule]) => {
     // vue: special rules
     if (a.name === ':key' && b.name === 'v-for') return 1
     if (a.name === 'v-for' && b.name === ':key') return -1
-    if (a.name.startsWith('data-') || b.name.startsWith('data-'))
+    if (
+      a.name.startsWith('data-') ||
+      b.name.startsWith('data-') ||
+      a.name.startsWith('@') ||
+      b.name.startsWith('@')
+    )
       return Number.MAX_SAFE_INTEGER
 
     const aWeight = getPriority(a.name, rule)
