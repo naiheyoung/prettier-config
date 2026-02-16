@@ -82,6 +82,7 @@ describe('sort attributes', () => {
       <script lang="ts" setup>
       // @ts-expect-error missing type
       import { a, b, h, ref, _ } from 'vue'
+      import type { Plugin } from 'prettier'
 
       const todos = ref([
         {
@@ -117,10 +118,12 @@ describe('sort specifiers', () => {
     ).toMatchInlineSnapshot(`
       "// @ts-nocheck i know
       import type { a, b, c, _ } from 'xxx'
+      // import syntax
       import type x from 'x'
       import { a, b as a, c, _ } from 'xxx'
       import XXX from 'xxx'
       import xxx from 'xxx'
+      /* named import */
       import A, { a, b, _a, _c } from 'xxx'
 
       /// toarrow

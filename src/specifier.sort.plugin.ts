@@ -1,15 +1,17 @@
 import type { Plugin } from 'prettier'
-import { AST, Rule } from './types'
+import { AST } from './types'
 import { normalize } from './utils'
 import { parsers as tsParsers } from 'prettier/plugins/typescript.js'
 import { parsers as htmlParsers } from 'prettier/parser-html'
 
-const importRegex = /^import\s+(?!type).*?\s+from\s+(?:.+)\r?\n?$/gm
-const importRegexWithType = /^import[ \t]+type[ \t]+(?:.*?)\s+from[ \t]+(?:.+)\r?\n?$/gm
+const importRegex =
+  /^(?:(?:\/\/[^\r\n]*\r?\n)|(?:\/\*(?:(?!\/\*)[\s\S])*?\*\/\r?\n))?import\s+(?!type\b)[\s\S]*?\s+from[ \t]+(?:.+)(?:\/\/[^\r\n]*)?\r?\n?$/gm
+const importRegexWithType =
+  /^(?:(?:\/\/[^\r\n]*\r?\n)|(?:\/\*(?:(?!\/\*)[\s\S])*?\*\/\r?\n))?import\s+type\s+(?:.*?)\s+from[ \t]+(?:.+)\r?\n?$/gm
 const importRegexWithVue =
-  /(?<=<script\b[^>]*>[\s\S]*?)import[ \t]+.*?from[ \t]+.+(?=[\s\S]*?<\/script>)/g
+  /(?<=<script\b[^>]*>[\s\S]*?)(?:(?:\/\/[^\r\n]*\r?\n)|(?:\/\*(?:(?!\/\*)[\s\S])*?\*\/\r?\n))?import[ \t]+.*?from[ \t]+.+(?=[\s\S]*?<\/script>)/g
 const importValuesRegex = /\{([^{}]+)\}/
-const SPECIALLINES = ['@ts-nocheck', '@ts-check']
+const SPECIALLINES = ['@ts-nocheck', '@ts-check', '@noformat', '@noprettier']
 
 const traverse = (node: AST) => {
   node.body.forEach(each => {

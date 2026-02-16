@@ -29,6 +29,7 @@
 <script lang="ts" setup>
 // @ts-expect-error missing type
 import { ref, h, _,b,a } from 'vue'
+import type {Plugin } from 'prettier'
 
 const todos = ref([
   {
