@@ -11,6 +11,10 @@ const importRegexWithType =
 const importRegexWithVue =
   /(?<=<script\b[^>]*>[\s\S]*?)(?:(?:\/\/[^\r\n]*\r?\n)|(?:\/\*(?:(?!\/\*)[\s\S])*?\*\/\r?\n))?import[ \t]+.*?from[ \t]+.+(?=[\s\S]*?<\/script>)/g
 const importValuesRegex = /\{([^{}]+)\}/
+const toArrowRegex =
+  /\/\/\/[ \t]+toarrow\r?\n[ \t]*(?<isAsync>async[ \t]+)?function[ \t]+(?<fnName>[a-zA-Z_$][\w$]*)[ \t]*\((?<fnParams>[^)]*)\)[ \t]*\{(?<fnContent>[\s\S]*?)^}/gm
+const toFunRegex =
+  /\/\/\/[ \t]+tofun\r?\n[ \t]*const[ \t]+(?<fnName>[a-zA-Z_$][\w$]*)[ \t]*=[ \t]*(?<isAsync>async[ \t]+)?\((?<fnParams>[^)]*)\)[ \t]*=>[ \t]*\{(?<fnContent>[\s\S]*?)^\}/gm
 const SPECIALLINES = ['@ts-nocheck', '@ts-check', '@noformat', '@noprettier']
 
 const traverse = (node: AST) => {
@@ -27,6 +31,17 @@ const traverse = (node: AST) => {
     })
   })
 }
+
+const commandProcess = (text: string) => {
+  text = text.replace(toArrowRegex, (_, isAsync, fnName, fnParams, fnContent) => {
+    return `const ${fnName} = ${isAsync || ''} (${fnParams}) => {${fnContent}}`
+  })
+  text = text.replace(toFunRegex, (_, fnName, isAsync, fnParams, fnContent) => {
+    return `${isAsync || ''}function ${fnName}(${fnParams}) {${fnContent}}`
+  })
+  return text
+}
+
 const specifiersSort: Plugin = {
   parsers: {
     typescript: {
@@ -40,6 +55,7 @@ const specifiersSort: Plugin = {
         if (tsParsers.typescript.preprocess) {
           text = tsParsers.typescript.preprocess(text, options) as string
         }
+        text = commandProcess(text)
         // ignored .vue
         if (options.parentParser && options.parentParser === 'vue') return text
         const firstLineRule = new RegExp(`^\/.*((?:${SPECIALLINES.join('|')}).*)\r?\n?`, 'i')
@@ -54,6 +70,7 @@ const specifiersSort: Plugin = {
         const imports: string[] = []
 
         text = text.replace(importRegexWithType, t => {
+          console.log(t)
           importTypes.push(t.trim())
           return ''
         })

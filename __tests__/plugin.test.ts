@@ -126,9 +126,23 @@ describe('sort specifiers', () => {
       /* named import */
       import A, { a, b, _a, _c } from 'xxx'
 
-      /// toarrow
-      const fn = (str: string) => {
-        console.log(str)
+      async function fn(user: string) {
+        await fetch(\`https://api.example.com/\${user}\`)
+      }
+
+      function fn(user: string) {
+        fetch(\`https://api.example.com/\${user}\`)
+      }
+
+      const fetchUser = (user: string) => {
+        fetch(\`https://api.example.com/\${user}\`).then(({ data }) => {
+          return data
+        })
+      }
+
+      const fetchUser = async (user: string) => {
+        const { data } = await fetch(\`https://api.example.com/\${user}\`)
+        return data
       }
       "
     `)
