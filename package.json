@@ -34,9 +34,6 @@
     "dist",
     "README.md"
   ],
-  "dependencies": {
-    "prettier-plugin-organize-attributes": "^1.0.0"
-  },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "fs-extra": "^11.3.3",
