@@ -1,5 +1,6 @@
 <template>
   <div
+  @b=""
     id="todos"
     ref="todosEl"
     :style="{ color: 'pink' }"
@@ -14,7 +15,7 @@
     :data="todos"
     :key="idx"
     @click=""
-    data-type="todos"></div>
+    data-type="todos" data-a="" @a=""></div>
   <svg xmlns="http://www.w3.org/2000/svg" height="1.2em" viewBox="0 0 24 24" width="1.2em">
     <path
       d="M12 5v6m0 3v1.5m0 3v.5m6-8l-6-6m-6 6l6-6"

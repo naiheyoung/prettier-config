@@ -1,7 +1,11 @@
 import type { Plugin } from 'prettier'
 import { AST, Rule } from './types'
-import { generateRule, toSort, mergeObject } from './utils'
+import { generateRule, toSort, mergeObject, normalize } from './utils'
 import { parsers as htmlParsers } from 'prettier/parser-html'
+
+const importRegexWithVue =
+  /(?<=<script\b[^>]*>[\s\S]*?)(?:(?:\/\/[^\r\n]*\r?\n)|(?:\/\*(?:(?!\/\*)[\s\S])*?\*\/\r?\n))?import[ \t]+.*?from[ \t]+.+(?=[\s\S]*?<\/script>)/g
+const importValuesRegex = /\{([^{}]+)\}/
 
 const defaultRule: Rule = {
   html: {
@@ -68,6 +72,27 @@ const attrsSort: Plugin = {
         const ast = htmlParsers.vue.parse(text, options)
         traverse(ast)
         return ast
+      },
+      preprocess(text, options) {
+        if (htmlParsers.vue.preprocess) {
+          text = htmlParsers.vue.preprocess(text, options) as string
+        }
+        text = text.replace(importRegexWithVue, i => {
+          i = i.replace(importValuesRegex, (_, namedImports: string) => {
+            namedImports = namedImports
+              .trim()
+              .split(',')
+              .sort((a, b) => {
+                return normalize(a.trim())
+                  .toLowerCase()
+                  .localeCompare(normalize(b.trim()).toLowerCase())
+              })
+              .join(',')
+            return `{${namedImports}}`
+          })
+          return i
+        })
+        return text
       }
     }
   }

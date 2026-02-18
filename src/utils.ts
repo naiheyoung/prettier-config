@@ -20,6 +20,12 @@ const getPriorityByIndex = (s: string, rule: Rule[keyof Rule]): number => {
   return Number.MAX_SAFE_INTEGER
 }
 
+const getPriorityByPrefix = (s: string) => {
+  if (s.startsWith('data-')) return 2
+  if (s.startsWith('@')) return 1
+  return 0
+}
+
 /**
  * special character handling
  */
@@ -28,6 +34,7 @@ export const normalize = (s: string) => {
   if (s.startsWith('[') && s.endsWith(']')) return s.slice(1, -1)
   if (s.startsWith('_')) return s.slice(1)
   if (s.startsWith('@')) return s.slice(1)
+  if (s.startsWith('data-')) return s.slice(5)
   return s
 }
 
@@ -35,16 +42,9 @@ export const toSort = (attrs: AST['attrs'] | any, rule: Rule[keyof Rule]) => {
   if (!attrs || attrs.length <= 0) return
 
   attrs!.sort((a: AttributeNode, b: AttributeNode) => {
-    // vue: special rules
-    if (a.name === ':key' && b.name === 'v-for') return 1
-    if (a.name === 'v-for' && b.name === ':key') return -1
-    if (
-      a.name.startsWith('data-') ||
-      b.name.startsWith('data-') ||
-      a.name.startsWith('@') ||
-      b.name.startsWith('@')
-    )
-      return Number.MAX_SAFE_INTEGER
+    const aGroup = getPriorityByPrefix(a.name)
+    const bGroup = getPriorityByPrefix(b.name)
+    if (aGroup !== bGroup) return aGroup - bGroup
 
     const aWeight = getPriority(a.name, rule)
     const bWeight = getPriority(b.name, rule)
