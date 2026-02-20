@@ -1,6 +1,6 @@
 import type { Plugin } from 'prettier'
 import { AST, Rule } from './types'
-import { generateRule, toSort, mergeObject, normalize } from './utils'
+import { generateRule, mergeObject, normalize, toSort } from './utils'
 import { parsers as htmlParsers } from 'prettier/parser-html'
 
 const importRegexWithVue =
@@ -82,13 +82,14 @@ const attrsSort: Plugin = {
             namedImports = namedImports
               .trim()
               .split(',')
+              .map(n => n.trim())
               .sort((a, b) => {
                 return normalize(a.trim())
                   .toLowerCase()
                   .localeCompare(normalize(b.trim()).toLowerCase())
               })
-              .join(',')
-            return `{${namedImports}}`
+              .join(', ')
+            return `{ ${namedImports} }`
           })
           return i
         })

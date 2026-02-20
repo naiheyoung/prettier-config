@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import * as prettier from 'prettier'
 import fs from 'fs-extra'
 import n from '../src/index'
@@ -103,7 +103,7 @@ describe('sort attributes', () => {
       <script>
       import * as prettier from 'prettier'
       // @ts-expect-error
-      import {a,b} from x
+      import { a, b } from x
       </script>
       "
     `)

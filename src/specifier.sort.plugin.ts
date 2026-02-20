@@ -4,9 +4,9 @@ import { normalize } from './utils'
 import { parsers as tsParsers } from 'prettier/plugins/typescript.js'
 
 const importRegex =
-  /^(?:(?:\/\/[^\r\n]*\r?\n)|(?:\/\*(?:(?!\/\*)[\s\S])*?\*\/\r?\n))?import\s+(?!type\b)[\s\S]*?\s+from[ \t]+(?:.+)(?:\/\/[^\r\n]*)?\r?\n?$/gm
+  /^(?:(?:\/\/[^\r\n]*\r?\n)|(?:\/\*(?:(?!\/\*)[\s\S])*?\*\/\r?\n))?import(?!\s+type\b)[\s\S]*?\s+from[ \t]+(?:.+)(?:\/\/[^\r\n]*)?\r?\n?$/gm
 const importRegexWithType =
-  /^(?:(?:\/\/[^\r\n]*\r?\n)|(?:\/\*(?:(?!\/\*)[\s\S])*?\*\/\r?\n))?import\s+type\s+(?:.*?)\s+from[ \t]+(?:.+)\r?\n?$/gm
+  /^(?:(?:\/\/[^\r\n]*\r?\n)|(?:\/\*(?:(?!\/\*)[\s\S])*?\*\/\r?\n))?import\s+type\s+(?:[\s\S]*?)\s+from[ \t\r\n]+(?:.+)\r?\n?$/gm
 const toArrowRegex =
   /\/\/\/[ \t]+toarrow\r?\n[ \t]*(?<isAsync>async[ \t]+)?function[ \t]+(?<fnName>[a-zA-Z_$][\w$]*)[ \t]*\((?<fnParams>[^)]*)\)[ \t]*\{(?<fnContent>[\s\S]*?)^}/gm
 const toFunRegex =
@@ -66,14 +66,18 @@ const specifiersSort: Plugin = {
         const importTypes: string[] = []
         const imports: string[] = []
 
-        text = text.replace(importRegexWithType, t => {
-          importTypes.push(t.trim())
-          return ''
-        })
-        text = text.replace(importRegex, i => {
-          imports.push(i.trim())
-          return ''
-        })
+        text = text
+          .replace(importRegexWithType, t => {
+            importTypes.push(t.trim())
+            return ''
+          })
+          .trimEnd()
+        text = text
+          .replace(importRegex, i => {
+            imports.push(i.trim())
+            return ''
+          })
+          .trimEnd()
         text = `${specialLine}${[...importTypes, ...imports].filter(Boolean).join('\n')}\n${text.trimEnd()}`
         return text
       }
